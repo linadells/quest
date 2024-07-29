@@ -1,5 +1,5 @@
-import 'package:quest/domain/entities/quest.dart';
+import 'package:quest/domain/entities/question.dart';
 
 abstract class QuestionRepository{
-  bool getQuestion(QuestEntity, int idOfQuestion);
+  void createQuestion(QuestionEntity question);
 }
