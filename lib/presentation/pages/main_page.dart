@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quest/core/style.dart';
+import 'package:quest/presentation/routes.dart/routes_constants.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -29,7 +31,10 @@ class MainPage extends StatelessWidget {
           ),
           ListTile(
             title: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                GoRouter.of(context).pop();
+                 GoRouter.of(context).pushNamed(MyRoutes.createQuestScreen);
+              },
               child: Text('Create quest'),
             ),
           ),

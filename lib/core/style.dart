@@ -2,7 +2,21 @@ import 'package:flutter/material.dart';
 
 const kDark = Color.fromARGB(255, 56, 56, 59);
 const kMedium = Color.fromARGB(255, 82, 73, 199);
-const kAccent = Color.fromARGB(255, 253, 238, 22);
+const kAccent = Color.fromARGB(255, 253, 230, 22);
+
+BoxDecoration kStyleForQuestionContainer = BoxDecoration(
+  shape: BoxShape.rectangle,
+  border: Border.all(
+    color: kMedium,
+    width: 2,
+    style: BorderStyle.solid,
+  ),
+  borderRadius: BorderRadius.circular(30.0), // Додаємо скруглений край
+);
+BoxDecoration kStyleForPoints = BoxDecoration(
+  color: kAccent, // Жовтий фон
+  borderRadius: BorderRadius.circular(30.0), // Скруглені краї
+);
 
 class AppThemes {
   static final ThemeData lightTheme = ThemeData(
@@ -14,7 +28,7 @@ class AppThemes {
       color: kDark,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      filled: false, 
+      filled: false,
       hintStyle: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
@@ -92,7 +106,7 @@ class AppThemes {
           fontWeight: FontWeight.normal,
           fontFamily: 'Montserrat'),
       bodySmall: TextStyle(
-          fontSize: 15.0, fontWeight: FontWeight.normal, color: kDark),
+          fontSize: 15.0, fontWeight: FontWeight.w500, color: kDark, fontFamily: 'Montserrat'),
       labelLarge: TextStyle(
           fontSize: 32.0,
           fontWeight: FontWeight.normal,

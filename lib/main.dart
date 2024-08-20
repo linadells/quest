@@ -4,6 +4,7 @@ import 'package:quest/core/style.dart';
 import 'package:quest/domain/usecases/log_in.dart';
 import 'package:quest/domain/usecases/register.dart';
 import 'package:quest/injection_container.dart';
+import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 import 'package:quest/presentation/bloc/registration_bloc/bloc/registration_bloc.dart';
 import 'package:quest/presentation/pages/registration_page.dart';
 import 'package:quest/presentation/routes.dart/router_config.dart';
@@ -18,8 +19,16 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RegistrationBloc(RegisterUseCase(sl()), LogInUseCase(sl())),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              RegistrationBloc(RegisterUseCase(sl()), LogInUseCase(sl())),
+        ),
+        BlocProvider(
+          create: (context) => CreateQuestBloc(),
+        ),
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: MyAppRouter.returnRouter(false),

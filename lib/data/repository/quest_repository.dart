@@ -7,11 +7,17 @@ import 'package:quest/injection_container.dart';
 
 class QuestRepositoryImpl implements QuestRepository {
   @override
-  void createQuest(QuestEntity quest) {
-    if (quest is QuestModel) {
-      final db = sl<FirebaseFirestore>();
-      db.collection("quest").add(quest.toJson()).then((DocumentReference doc) =>
-          print('DocumentSnapshot added with ID: ${doc.id}'));
+  Future<void> createQuest(QuestEntity quest) async {
+    try {
+      if (quest is QuestModel) {
+        print(quest);
+        final db = sl<FirebaseFirestore>();
+        db.collection("quest").add(quest.toJson()).then(
+            (DocumentReference doc) =>
+                print('DocumentSnapshot added with ID: ${doc.id}'));
+     }
+    } catch (e) {
+      print(e);
     }
   }
 

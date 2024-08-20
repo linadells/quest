@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:quest/presentation/pages/create_quest.dart';
 import 'package:quest/presentation/pages/main_page.dart';
 import 'package:quest/presentation/pages/registration_page.dart';
 import 'package:quest/presentation/pages/welcome_page.dart';
@@ -41,6 +42,14 @@ class MyAppRouter {
           path: '/main',
           pageBuilder: (context, state) => MaterialPage(
             child: MainPage(),
+            key: state.pageKey,
+          ),
+        ),
+        GoRoute(
+          name: MyRoutes.createQuestScreen,
+          path: '/createQuest',
+          pageBuilder: (context, state) => MaterialPage(
+            child: CreateQuestPage(),
             key: state.pageKey,
           ),
         ),
