@@ -10,9 +10,20 @@ sealed class CreateQuestEvent extends Equatable {
 class AddQuestionEvent extends CreateQuestEvent {
   AddQuestionEvent();
 }
+
+class EditQuestionEvent extends CreateQuestEvent {
+  QuestionModel questionModel;
+  EditQuestionEvent(this.questionModel);
+}
+
 class FinishAddQuestionEvent extends CreateQuestEvent {
   QuestionModel? questionModel;
 FinishAddQuestionEvent({this.questionModel});
+}
+
+class FinishEditQuestionEvent extends CreateQuestEvent {
+  QuestionModel questionModel, oldQuestionModel;
+FinishEditQuestionEvent({required this.questionModel, required this.oldQuestionModel});
 }
 
 class AddLocationEvent extends CreateQuestEvent {

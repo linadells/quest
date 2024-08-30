@@ -2,13 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quest/core/style.dart';
+import 'package:quest/data/models/question.dart';
 import 'package:quest/domain/entities/question.dart';
 import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 import 'package:quest/presentation/widgets/quest_creation/display_question.dart';
 
 class ListOfQuestions extends StatelessWidget {
-  List<QuestionEntity>? questions;
+  List<QuestionModel>? questions;
   ListOfQuestions({this.questions});
 
   @override
@@ -23,7 +24,7 @@ class ListOfQuestions extends StatelessWidget {
                 ? ListView.builder(
                     itemCount: questions != null ? questions!.length : 1,
                     itemBuilder: (context, index) =>
-                        DisplayQuestion(questionEntity: questions![index]))
+                        DisplayQuestion(questionModel: questions![index]))
                 : Center(child: Text('There aren`t any questions')),
           ),
           Container(

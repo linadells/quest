@@ -1,17 +1,20 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quest/core/style.dart';
+import 'package:quest/data/models/question.dart';
 import 'package:quest/domain/entities/question.dart';
+import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 
 class DisplayQuestion extends StatelessWidget {
-  final QuestionEntity questionEntity;
-  const DisplayQuestion({required this.questionEntity});
+  final QuestionModel questionModel;
+  const DisplayQuestion({required this.questionModel});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
-        
+        BlocProvider.of<CreateQuestBloc>(context).add(EditQuestionEvent(questionModel));
       },
       child: Container(
         margin: EdgeInsets.all(5),
@@ -22,14 +25,14 @@ class DisplayQuestion extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                questionEntity.question,
+                questionModel.question,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Container(
                 decoration: kStyleForPoints,
                 padding: EdgeInsets.all(5),
                 child: Text(
-                  'Points: ${questionEntity.points}',
+                  'Points: ${questionModel.points}',
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -39,7 +42,7 @@ class DisplayQuestion extends StatelessWidget {
             ],
           ),
           Column(
-              children: questionEntity.answers.map(
+              children: questionModel.answers.map(
             (answer) {
               return Row(
                 children: [
@@ -58,7 +61,7 @@ class DisplayQuestion extends StatelessWidget {
             },
           ).toList()),
           Text(
-            'Correct answer: ${questionEntity.correctAnswer}',
+            'Correct answer: ${questionModel.correctAnswer}',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ]),

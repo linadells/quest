@@ -37,4 +37,27 @@ class QuestionModel extends QuestionEntity {
       correctAnswer: json['correctAnswer'],
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is QuestionModel &&
+        other.id == id &&
+        other.points == points &&
+        other.question == question &&
+        other.answers == answers &&
+        other.theme == theme &&
+        other.correctAnswer == correctAnswer;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        points.hashCode ^
+        question.hashCode ^
+        answers.hashCode ^
+        theme.hashCode ^
+        correctAnswer.hashCode;
+  }
 }

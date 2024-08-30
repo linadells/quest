@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quest/core/format_exception.dart';
+import 'package:quest/data/models/location.dart';
 import 'package:quest/data/models/quest.dart';
+import 'package:quest/data/models/question.dart';
 import 'package:quest/domain/entities/location.dart';
 import 'package:quest/domain/entities/question.dart';
 import 'package:quest/injection_container.dart';
@@ -16,8 +18,8 @@ import 'package:quest/presentation/widgets/quest_creation/list_of_question.dart'
 import 'package:quest/presentation/widgets/quest_creation/navigation_bar_create_quest.dart';
 
 class CreateQuestPage extends StatelessWidget {
-  late List<QuestionEntity> questions;
-  late List<LocationEntity> locations;
+  late List<QuestionModel> questions;
+  late List<LocationModel> locations;
   late QuestModel questModel;
   TextEditingController nameController = TextEditingController();
 
@@ -67,7 +69,20 @@ class CreateQuestPage extends StatelessWidget {
                         .add(FinishAddQuestionEvent());
                   });
                 });
-              } else if (state is AddingLocationState) {
+              } else if (state is EditingQuestionState) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showModalBottomSheet(
+                      isDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return AddQuestion(questionModel: state.questionModel);
+                      }).then((_) {
+                    BlocProvider.of<CreateQuestBloc>(context)
+                        .add(FinishAddQuestionEvent());
+                  });
+                });
+              }
+              else if (state is AddingLocationState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   showModalBottomSheet(
                       isDismissible: true,

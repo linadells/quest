@@ -4,6 +4,7 @@ import 'package:quest/data/models/location.dart';
 import 'package:quest/data/models/quest.dart';
 import 'package:quest/data/models/question.dart';
 import 'package:quest/data/repository/quest_repository.dart';
+import 'package:quest/domain/entities/question.dart';
 import 'package:quest/injection_container.dart';
 
 part 'create_quest_event.dart';
@@ -18,10 +19,16 @@ class CreateQuestBloc extends Bloc<CreateQuestEvent, CreateQuestState> {
     on<AddLocationEvent>(onAddLocation);
     on<FinishAddLocationEvent>(onFinishAddLocation);
     on<LeaveQuestCreationEvent>(onLeaveQuestCreation);
+    on<EditQuestionEvent>(onEditQuestion);
+    on<FinishEditQuestionEvent>(onFinishEditQuestion);
   }
 
   onAddQuestion(AddQuestionEvent event, Emitter<CreateQuestState> emit) {
     emit(AddingQuestionState());
+  }
+
+  onEditQuestion(EditQuestionEvent event, Emitter<CreateQuestState> emit) {
+    emit(EditingQuestionState(event.questionModel));
   }
 
   onFinishAddQuestion(
@@ -31,6 +38,13 @@ class CreateQuestBloc extends Bloc<CreateQuestEvent, CreateQuestState> {
           ? questModel.questions?.add(event.questionModel!)
           : questModel.questions = [event.questionModel!];
     }
+    emit(CreateQuestInitialState());
+  }
+
+  onFinishEditQuestion(
+      FinishEditQuestionEvent event, Emitter<CreateQuestState> emit) {
+        int tmp =questModel.questions!.indexOf(event.oldQuestionModel);
+    questModel.questions![tmp]=event.questionModel;
     emit(CreateQuestInitialState());
   }
 

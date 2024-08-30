@@ -15,6 +15,11 @@ final class AddingQuestionState extends CreateQuestState {
   AddingQuestionState();
 }
 
+final class EditingQuestionState extends CreateQuestState {
+  QuestionModel questionModel;
+  EditingQuestionState(this.questionModel);
+}
+
 final class AddingLocationState extends CreateQuestState {
   AddingLocationState();
 }

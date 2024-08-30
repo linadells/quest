@@ -9,8 +9,8 @@ import 'package:quest/domain/entities/question.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 
 class AddQuestion extends StatefulWidget {
-  //QuestionModel? questionModel;
-  //AddQuestion({this.questionModel});
+  QuestionModel? questionModel;
+  AddQuestion({this.questionModel});
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -18,7 +18,7 @@ class AddQuestion extends StatefulWidget {
 
 class _AddQuestionState extends State<AddQuestion> {
   final TextEditingController _controllerQuestion = TextEditingController();
-  final List<TextEditingController> _answerControllers = [];
+  List<TextEditingController> _answerControllers = [];
   int _selectedAnswerIndex = 0;
   int points = 1;
 
@@ -27,7 +27,15 @@ class _AddQuestionState extends State<AddQuestion> {
     super.initState();
     _answerControllers.add(TextEditingController());
 
-    
+    if (widget.questionModel != null) {
+      _controllerQuestion.text = widget.questionModel!.question;
+      _answerControllers = widget.questionModel!.answers.map((answer) {
+        return TextEditingController(text: answer);
+      }).toList();
+      _selectedAnswerIndex = widget.questionModel!.answers
+          .indexOf(widget.questionModel!.correctAnswer);
+      points = widget.questionModel!.points;
+    }
   }
 
   @override
@@ -155,11 +163,11 @@ class _AddQuestionState extends State<AddQuestion> {
                     Expanded(
                       child: Container(
                         height: 45,
-                        margin: EdgeInsets.all(3),
+                        margin: EdgeInsets.all(5),
                         child: TextField(
                           controller: answerController,
                           decoration:
-                              InputDecoration(labelText: 'Answer ${index + 1}'),
+                              InputDecoration(hintText: 'Answer ${index + 1}'),
                         ),
                       ),
                     ),
@@ -204,7 +212,7 @@ class _AddQuestionState extends State<AddQuestion> {
                         .where((text) => text.isNotEmpty)
                         .toList();
                     if (answers.length == 0) {
-                      throw Exception('You have to add at least one answear');
+                      throw Exception('You have to add at least one answer');
                     }
                     final question = QuestionModel(
                         id: 'id',
@@ -214,8 +222,14 @@ class _AddQuestionState extends State<AddQuestion> {
                         theme: 'theme',
                         correctAnswer: tempCorrectAnswer);
                     GoRouter.of(context).pop();
-                    BlocProvider.of<CreateQuestBloc>(context)
-                        .add(FinishAddQuestionEvent(questionModel: question));
+                    if (widget.questionModel == null)
+                      BlocProvider.of<CreateQuestBloc>(context)
+                          .add(FinishAddQuestionEvent(questionModel: question));
+                    else
+                      BlocProvider.of<CreateQuestBloc>(context).add(
+                          FinishEditQuestionEvent(
+                              questionModel: question,
+                              oldQuestionModel: widget.questionModel!));
                   } on Exception catch (e) {
                     showExceptionAlert(e, context);
                   }
