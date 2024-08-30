@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quest/core/format_exception.dart';
 import 'package:quest/core/style.dart';
 import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/bloc/registration_bloc/bloc/registration_bloc.dart';
@@ -44,61 +44,63 @@ class RegistrationScreen extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
     TextEditingController nicknameController = TextEditingController();
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Start your quest',
-              style: Theme.of(context).textTheme.displayLarge),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 400, vertical: 10),
-            child: TextField(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Start your quest',
+                style: Theme.of(context).textTheme.displayLarge),
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
               controller: emailController,
-              decoration: InputDecoration(hintText: 'Email'),
+              decoration: InputDecoration(labelText: 'Email'),
             ),
-          ),
-          register
-              ? Container(
-                  margin: EdgeInsets.symmetric(horizontal: 400, vertical: 10),
-                  child: TextField(
-                    controller: nicknameController,
-                    decoration: InputDecoration(hintText: 'Nickname'),
-                  ),
-                )
-              : Container(),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 400, vertical: 10),
-            child: TextField(
-              obscureText: true,
+            SizedBox(
+              height: 20,
+            ),
+            register
+                ? Column(
+                    children: [
+                      TextField(
+                        controller: nicknameController,
+                        decoration: InputDecoration(labelText: 'Nickname'),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  )
+                : Container(),
+            TextField(
               controller: passwordController,
-              decoration: InputDecoration(hintText: 'Password'),
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
             ),
-          ),
-          TextButton(
-              onPressed: () {
-                final email = emailController.text;
-                final password = passwordController.text;
-                final String? nickname = nicknameController.text;
-                context.read<RegistrationBloc>().add(register
-                    ? Register(email: email, password: password, nickname: nickname!)
-                    : LogIn(email: email, password: password));
-              },
-              child: Text(
-                register ? 'Register' : 'Log in',
-              )),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+                onPressed: () {
+                  final email = emailController.text;
+                  final password = passwordController.text;
+                  final String? nickname = nicknameController.text;
+                  context.read<RegistrationBloc>().add(register
+                      ? Register(
+                          email: email, password: password, nickname: nickname!)
+                      : LogIn(email: email, password: password));
+                },
+                child: Text(
+                  register ? 'Register' : 'Log in',
+                )),
+          ],
+        ),
       ),
     );
   }
 }
 
-String formatException(Exception errorMessage) {
-  final regex = RegExp(r'\[(.*?)\] ');
-  final formattedMessage = errorMessage.toString().replaceFirst(regex, '');
-
-  const exceptionPrefix = 'Exception: ';
-  if (formattedMessage.startsWith(exceptionPrefix)) {
-    return formattedMessage.replaceFirst(exceptionPrefix, '');
-  }
-
-  return formattedMessage;
-}

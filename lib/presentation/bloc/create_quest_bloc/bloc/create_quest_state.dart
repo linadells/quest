@@ -25,6 +25,10 @@ final class FinishQuestCreationState extends CreateQuestState {
   const FinishQuestCreationState();
 }
 
+final class DoneQuestCreationState extends CreateQuestState {
+  const DoneQuestCreationState();
+}
+
 final class ErrorQuestCreationState extends CreateQuestState {
   final Exception error;
   const ErrorQuestCreationState({required this.error});

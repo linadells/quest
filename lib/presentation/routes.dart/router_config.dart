@@ -9,7 +9,7 @@ import 'package:quest/presentation/routes.dart/routes_constants.dart';
 class MyAppRouter {
   static GoRouter returnRouter(bool isAuth) {
     return GoRouter(
-      initialLocation: '/',
+      initialLocation: '/createQuest',
       routes: <RouteBase>[
         GoRoute(
           name: MyRoutes.welcomeScreen,

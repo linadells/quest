@@ -9,55 +9,60 @@ class DisplayQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
-      decoration: kStyleForQuestionContainer,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              questionEntity.question,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Container(
-              decoration: kStyleForPoints,
-              padding: EdgeInsets.all(5),
-              child: Text(
-                'Points: ${questionEntity.points}',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Colors.white),
+    return GestureDetector(
+      onDoubleTap: () {
+        
+      },
+      child: Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
+        decoration: kStyleForQuestionContainer,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                questionEntity.question,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-            ),
-          ],
-        ),
-        Column(
-            children: questionEntity.answers.map(
-          (answer) {
-            return Row(
-              children: [
-                Text(
-                  '• ',
-                  style: Theme.of(context).textTheme.bodySmall,
+              Container(
+                decoration: kStyleForPoints,
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  'Points: ${questionEntity.points}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.white),
                 ),
-                Expanded(
-                  child: Text(
-                    answer,
+              ),
+            ],
+          ),
+          Column(
+              children: questionEntity.answers.map(
+            (answer) {
+              return Row(
+                children: [
+                  Text(
+                    '• ',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                ),
-              ],
-            );
-          },
-        ).toList()),
-        Text(
-          'Correct answer: ${questionEntity.correctAnswer}',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ]),
+                  Expanded(
+                    child: Text(
+                      answer,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ).toList()),
+          Text(
+            'Correct answer: ${questionEntity.correctAnswer}',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ]),
+      ),
     );
   }
 }

@@ -46,15 +46,6 @@ class _SettingsForQuestState extends State<SettingsForQuest> {
           ),
           Text('Quantity of question:$lenQuestions'),
           Text('Quantity of locations:$lenLocations'),
-          // lenLocations != lenQuestions
-          //     ? Text(
-          //         'Quantity of locations and questions must be the same',
-          //         style: Theme.of(context)
-          //             .textTheme
-          //             .bodyMedium
-          //             ?.copyWith(color: Colors.redAccent),
-          //       )
-          //     : Container(),
         ],
       ),
     );

@@ -27,7 +27,7 @@ class ListOfQuestions extends StatelessWidget {
                 : Center(child: Text('There aren`t any questions')),
           ),
           Container(
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

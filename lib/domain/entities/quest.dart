@@ -7,8 +7,8 @@ class QuestEntity {
   int? quantityOfQuestions;
   String? name;
   int? maxPoints;
-  List<QuestionEntity>? questions;
-  List<LocationEntity>? locations;
+  covariant List<QuestionEntity>? questions;
+  covariant List<LocationEntity>? locations;
   bool? isShuffled;
 
   QuestEntity();

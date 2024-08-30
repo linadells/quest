@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quest/core/format_exception.dart';
 import 'package:quest/core/style.dart';
 import 'package:quest/data/models/quest.dart';
 import 'package:quest/data/models/question.dart';
@@ -8,7 +9,8 @@ import 'package:quest/domain/entities/question.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 
 class AddQuestion extends StatefulWidget {
-  AddQuestion();
+  //QuestionModel? questionModel;
+  //AddQuestion({this.questionModel});
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -17,13 +19,15 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
   final TextEditingController _controllerQuestion = TextEditingController();
   final List<TextEditingController> _answerControllers = [];
-  int? _selectedAnswerIndex = 0;
+  int _selectedAnswerIndex = 0;
   int points = 1;
 
   @override
   void initState() {
     super.initState();
     _answerControllers.add(TextEditingController());
+
+    
   }
 
   @override
@@ -36,14 +40,16 @@ class _AddQuestionState extends State<AddQuestion> {
   }
 
   void _addAnswerField() {
-    if (_answerControllers.length < 8) {
-      setState(() {
-        _answerControllers.add(TextEditingController());
-      });
-    } else {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('You cannot add more than 8 answers')),
-      // );
+    try {
+      if (_answerControllers.length < 8) {
+        setState(() {
+          _answerControllers.add(TextEditingController());
+        });
+      } else {
+        throw Exception('You can`t add more than 8 answers');
+      }
+    } on Exception catch (e) {
+      showExceptionAlert(e, context);
     }
   }
 
@@ -55,7 +61,7 @@ class _AddQuestionState extends State<AddQuestion> {
           margin: EdgeInsets.all(10),
           child: TextField(
             controller: _controllerQuestion,
-            decoration: InputDecoration(hintText: 'Your question'),
+            decoration: InputDecoration(labelText: 'Your question'),
           ),
         ),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -142,7 +148,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       groupValue: _selectedAnswerIndex,
                       onChanged: (int? value) {
                         setState(() {
-                          _selectedAnswerIndex = value;
+                          _selectedAnswerIndex = value!;
                         });
                       },
                     ),
@@ -153,7 +159,7 @@ class _AddQuestionState extends State<AddQuestion> {
                         child: TextField(
                           controller: answerController,
                           decoration:
-                              InputDecoration(hintText: 'Answer ${index + 1}'),
+                              InputDecoration(labelText: 'Answer ${index + 1}'),
                         ),
                       ),
                     ),
@@ -184,30 +190,34 @@ class _AddQuestionState extends State<AddQuestion> {
               margin: EdgeInsets.all(5),
               child: TextButton(
                 onPressed: () {
-                  final answers = _answerControllers
-                      .map((controller) => controller.text)
-                      .where((text) => text.isNotEmpty)
-                      .toList();
-                  if (answers.length == 0 || _controllerQuestion.text.isEmpty) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text(
-                              'You have to add question and at least one answear')),
-                    );
-                    BlocProvider.of<CreateQuestBloc>(context)
-                        .add(FinishAddQuestionEvent());
-                  } else {
+                  try {
+                    if (_controllerQuestion.text.isEmpty) {
+                      throw Exception('You have to add a question');
+                    }
+                    if (_answerControllers[_selectedAnswerIndex].text.isEmpty) {
+                      throw Exception('Correct answer is empty');
+                    }
+                    String tempCorrectAnswer =
+                        _answerControllers[_selectedAnswerIndex].text;
+                    final answers = _answerControllers
+                        .map((controller) => controller.text)
+                        .where((text) => text.isNotEmpty)
+                        .toList();
+                    if (answers.length == 0) {
+                      throw Exception('You have to add at least one answear');
+                    }
                     final question = QuestionModel(
                         id: 'id',
                         points: points,
                         question: _controllerQuestion.text,
                         answers: answers,
                         theme: 'theme',
-                        correctAnswer: answers[_selectedAnswerIndex!]);
+                        correctAnswer: tempCorrectAnswer);
                     GoRouter.of(context).pop();
                     BlocProvider.of<CreateQuestBloc>(context)
-                        .add(FinishAddQuestionEvent(questionEntity: question));
+                        .add(FinishAddQuestionEvent(questionModel: question));
+                  } on Exception catch (e) {
+                    showExceptionAlert(e, context);
                   }
                 },
                 child: Container(

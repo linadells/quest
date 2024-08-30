@@ -62,7 +62,7 @@ class _AddLocationState extends State<AddLocation> {
                   child: TextField(
                     controller: answerController,
                     decoration:
-                        InputDecoration(hintText: 'Location ${index + 1}'),
+                        InputDecoration(labelText: 'Location ${index + 1}'),
                   ),
                 );
               }).toList(),
@@ -107,7 +107,7 @@ class _AddLocationState extends State<AddLocation> {
                   } else {
                     GoRouter.of(context).pop();
                     BlocProvider.of<CreateQuestBloc>(context).add(
-                        FinishAddLocationEvent(locationEntities: locations));
+                        FinishAddLocationEvent(locationModels: locations));
                   }
                 },
                 child: Container(

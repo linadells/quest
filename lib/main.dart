@@ -7,6 +7,7 @@ import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 import 'package:quest/presentation/bloc/registration_bloc/bloc/registration_bloc.dart';
 import 'package:quest/presentation/pages/registration_page.dart';
+import 'package:quest/presentation/pages/welcome_page.dart';
 import 'package:quest/presentation/routes.dart/router_config.dart';
 
 void main() async {
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
           create: (context) => CreateQuestBloc(),
         ),
       ],
-      child: MaterialApp.router(
+      child: //WelcomeScreen(),
+      MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: MyAppRouter.returnRouter(false),
         theme: AppThemes.lightTheme,

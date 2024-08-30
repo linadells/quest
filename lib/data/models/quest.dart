@@ -8,10 +8,23 @@ class QuestModel extends QuestEntity {
       int? quantityOfQuestions,
       String? name,
       int? maxPoints,
-      List<QuestionModel>? questions, 
-      List<LocationModel>? locations, 
+      List<QuestionModel>? questions,
+      List<LocationModel>? locations,
       bool? isShuffled})
-      : super();
+      : super() {
+    this.id = id;
+    this.quantityOfQuestions = quantityOfQuestions;
+    this.name = name;
+    this.maxPoints = maxPoints;
+    this.questions = questions;
+    this.locations = locations;
+    this.isShuffled = isShuffled;
+  }
+
+  @override
+  List<LocationModel>? locations;
+  @override
+  List<QuestionModel>? questions;
 
   Map<String, dynamic> toJson() {
     return {
@@ -19,7 +32,13 @@ class QuestModel extends QuestEntity {
       'quantityOfQuestions': quantityOfQuestions,
       'name': name,
       'maxPoints': maxPoints,
-      'questions': questions,
+      'isShuffeled': isShuffled,
+      'questions': questions != null
+          ? questions?.map((question) => question.toJson()).toList()
+          : null,
+      'locations': locations != null
+          ? locations?.map((locations) => locations.toJson()).toList()
+          : null,
     };
   }
 

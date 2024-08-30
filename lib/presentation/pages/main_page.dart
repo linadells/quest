@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quest/core/style.dart';
+import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/routes.dart/routes_constants.dart';
 
 class MainPage extends StatelessWidget {
@@ -25,7 +27,7 @@ class MainPage extends StatelessWidget {
                       size: 50,
                       color: kAccent,
                     )),
-                Text('Katia')
+                Text(sl<FirebaseAuth>().currentUser!.displayName?? 'Unautorized'),
               ],
             ),
           ),

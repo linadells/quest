@@ -10,7 +10,6 @@ class QuestRepositoryImpl implements QuestRepository {
   Future<void> createQuest(QuestEntity quest) async {
     try {
       if (quest is QuestModel) {
-        print(quest);
         final db = sl<FirebaseFirestore>();
         db.collection("quest").add(quest.toJson()).then(
             (DocumentReference doc) =>

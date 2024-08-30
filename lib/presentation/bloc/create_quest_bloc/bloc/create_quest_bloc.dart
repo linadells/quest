@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:quest/data/models/location.dart';
 import 'package:quest/data/models/quest.dart';
+import 'package:quest/data/models/question.dart';
 import 'package:quest/data/repository/quest_repository.dart';
-import 'package:quest/domain/entities/location.dart';
-import 'package:quest/domain/entities/question.dart';
 import 'package:quest/injection_container.dart';
 
 part 'create_quest_event.dart';
@@ -17,6 +17,7 @@ class CreateQuestBloc extends Bloc<CreateQuestEvent, CreateQuestState> {
     on<FinishAddQuestionEvent>(onFinishAddQuestion);
     on<AddLocationEvent>(onAddLocation);
     on<FinishAddLocationEvent>(onFinishAddLocation);
+    on<LeaveQuestCreationEvent>(onLeaveQuestCreation);
   }
 
   onAddQuestion(AddQuestionEvent event, Emitter<CreateQuestState> emit) {
@@ -25,10 +26,11 @@ class CreateQuestBloc extends Bloc<CreateQuestEvent, CreateQuestState> {
 
   onFinishAddQuestion(
       FinishAddQuestionEvent event, Emitter<CreateQuestState> emit) {
-    if (event.questionEntity != null)
+    if (event.questionModel != null) {
       questModel.questions != null
-          ? questModel.questions?.add(event.questionEntity!)
-          : questModel.questions = [event.questionEntity!];
+          ? questModel.questions?.add(event.questionModel!)
+          : questModel.questions = [event.questionModel!];
+    }
     emit(CreateQuestInitialState());
   }
 
@@ -38,18 +40,21 @@ class CreateQuestBloc extends Bloc<CreateQuestEvent, CreateQuestState> {
 
   onFinishAddLocation(
       FinishAddLocationEvent event, Emitter<CreateQuestState> emit) {
-    if (event.locationEntities != null)
+    if (event.locationModels != null)
       questModel.locations != null
-          ? questModel.locations?.addAll(event.locationEntities!)
-          : questModel.locations = event.locationEntities!;
+          ? questModel.locations?.addAll(event.locationModels!)
+          : questModel.locations = event.locationModels!;
     emit(CreateQuestInitialState());
   }
 
   onFinishQuestCreation(
       FinishCreationQuestEvent event, Emitter<CreateQuestState> emit) async {
-        print('in finish');
     emit(LoadingQuestCreationState());
     await sl<QuestRepositoryImpl>().createQuest(questModel);
     emit(FinishQuestCreationState());
+  }
+
+  onLeaveQuestCreation(LeaveQuestCreationEvent event, Emitter<CreateQuestState> emit){
+    emit(DoneQuestCreationState());
   }
 }
