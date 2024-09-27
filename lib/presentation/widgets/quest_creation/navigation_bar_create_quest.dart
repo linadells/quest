@@ -10,6 +10,7 @@ class NavigationBarCreateQuest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const BottomAppBar(
+      color: kDark,
       child: TabBar(
         labelColor: kMedium,
         unselectedLabelColor: Colors.white,
@@ -20,7 +21,6 @@ class NavigationBarCreateQuest extends StatelessWidget {
           Tab(icon: Icon(Icons.settings), text: 'Settings'),
         ],
       ),
-      color: kDark,
     );
   }
 }

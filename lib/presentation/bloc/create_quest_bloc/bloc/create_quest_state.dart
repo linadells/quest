@@ -8,11 +8,11 @@ sealed class CreateQuestState extends Equatable {
 }
 
 final class CreateQuestInitialState extends CreateQuestState {
-  CreateQuestInitialState();
+  const CreateQuestInitialState();
 }
 
 final class AddingQuestionState extends CreateQuestState {
-  AddingQuestionState();
+  const AddingQuestionState();
 }
 
 final class EditingQuestionState extends CreateQuestState {
@@ -20,8 +20,13 @@ final class EditingQuestionState extends CreateQuestState {
   EditingQuestionState(this.questionModel);
 }
 
+final class EditingLocationState extends CreateQuestState {
+  LocationModel locationModel;
+  EditingLocationState(this.locationModel);
+}
+
 final class AddingLocationState extends CreateQuestState {
-  AddingLocationState();
+  const AddingLocationState();
 }
 
 final class LoadingQuestCreationState extends CreateQuestState {}
@@ -37,4 +42,8 @@ final class DoneQuestCreationState extends CreateQuestState {
 final class ErrorQuestCreationState extends CreateQuestState {
   final Exception error;
   const ErrorQuestCreationState({required this.error});
+}
+
+final class EdditingQuestState extends CreateQuestState{
+  EdditingQuestState();
 }

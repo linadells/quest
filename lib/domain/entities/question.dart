@@ -8,7 +8,7 @@ class QuestionEntity extends Equatable {
   final String theme;
   final String correctAnswer;
 
-  QuestionEntity(
+  const QuestionEntity(
       {required this.id,
       required this.points,
       required this.question,

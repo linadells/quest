@@ -19,13 +19,13 @@ class WelcomeScreen extends StatelessWidget {
             Text('Choose option to start',
                 style: Theme.of(context).textTheme.displayLarge),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: TextButton(
                 onPressed: () {
                   GoRouter.of(context).pushNamed(MyRoutes.registrationScreen);
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Register',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!
@@ -35,13 +35,13 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: TextButton(
                 onPressed: () {
                   GoRouter.of(context).pushNamed(MyRoutes.loginScreen);
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Log in',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!

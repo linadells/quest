@@ -3,7 +3,7 @@ import 'package:quest/domain/entities/location.dart';
 import 'package:quest/domain/entities/question.dart';
 
 class QuestEntity {
-  String? id;
+  String? creatorEmail;
   int? quantityOfQuestions;
   String? name;
   int? maxPoints;

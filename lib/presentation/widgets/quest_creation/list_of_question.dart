@@ -10,50 +10,54 @@ import 'package:quest/presentation/widgets/quest_creation/display_question.dart'
 
 class ListOfQuestions extends StatelessWidget {
   List<QuestionModel>? questions;
-  ListOfQuestions({this.questions});
+  ListOfQuestions({super.key, this.questions});
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-          Text(
-            'Questions:',
-            style: Theme.of(context).textTheme.displayMedium,
-          ),
-          Expanded(
-            child: questions?.length!=0
-                ? ListView.builder(
-                    itemCount: questions != null ? questions!.length : 1,
-                    itemBuilder: (context, index) =>
-                        DisplayQuestion(questionModel: questions![index]))
-                : Center(child: Text('There aren`t any questions')),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<CreateQuestBloc>(context).add(AddQuestionEvent());
-                  },
-                  child: Text('Add questions'),
-                  style: Theme.of(context).textButtonTheme.style?.copyWith(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return kAccent.withOpacity(0.6);
-                        } else if (states.contains(MaterialState.hovered)) {
-                          return kAccent.withOpacity(0.8);
-                        }
-                        return kAccent;
+      Text(
+        'Questions:',
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+      Expanded(
+        child: questions?.length != 0
+            ? ListView.builder(
+                itemCount: questions != null ? questions!.length : 1,
+                itemBuilder: (context, index) => DisplayQuestion(
+                      questionModel: questions![index],
+                      onDismiss: () {
+                        questions!.removeAt(index);
                       },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ]
-    );
+                    ))
+            : const Center(child: Text('There aren`t any questions')),
+      ),
+      Container(
+        margin: const EdgeInsets.all(5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                BlocProvider.of<CreateQuestBloc>(context)
+                    .add(AddQuestionEvent());
+              },
+              style: Theme.of(context).textButtonTheme.style?.copyWith(
+                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.pressed)) {
+                      return kAccent.withOpacity(0.6);
+                    } else if (states.contains(WidgetState.hovered)) {
+                      return kAccent.withOpacity(0.8);
+                    }
+                    return kAccent;
+                  },
+                ),
+              ),
+              child: Text('Add questions'),
+            )
+          ],
+        ),
+      ),
+    ]);
   }
 }

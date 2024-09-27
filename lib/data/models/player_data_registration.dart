@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quest/domain/entities/player_data_registration.dart';
 
 class PlayerModel extends PlayerDataRegistrationEntity {

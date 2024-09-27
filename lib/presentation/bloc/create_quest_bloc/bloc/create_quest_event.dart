@@ -8,7 +8,7 @@ sealed class CreateQuestEvent extends Equatable {
 }
 
 class AddQuestionEvent extends CreateQuestEvent {
-  AddQuestionEvent();
+  const AddQuestionEvent();
 }
 
 class EditQuestionEvent extends CreateQuestEvent {
@@ -16,18 +16,30 @@ class EditQuestionEvent extends CreateQuestEvent {
   EditQuestionEvent(this.questionModel);
 }
 
-class FinishAddQuestionEvent extends CreateQuestEvent {
-  QuestionModel? questionModel;
-FinishAddQuestionEvent({this.questionModel});
-}
 
 class FinishEditQuestionEvent extends CreateQuestEvent {
   QuestionModel questionModel, oldQuestionModel;
 FinishEditQuestionEvent({required this.questionModel, required this.oldQuestionModel});
 }
 
+class EditLocationEvent extends CreateQuestEvent {
+  LocationModel locationModel;
+  EditLocationEvent(this.locationModel);
+}
+
+
+class FinishEditLocationEvent extends CreateQuestEvent {
+  LocationModel locationModel, oldLocationModel;
+FinishEditLocationEvent({required this.locationModel, required this.oldLocationModel});
+}
+
+class FinishAddQuestionEvent extends CreateQuestEvent {
+  QuestionModel? questionModel;
+FinishAddQuestionEvent({this.questionModel});
+}
+
 class AddLocationEvent extends CreateQuestEvent {
-  AddLocationEvent();
+  const AddLocationEvent();
 }
 class FinishAddLocationEvent extends CreateQuestEvent {
   List<LocationModel>? locationModels;
@@ -40,4 +52,19 @@ class FinishCreationQuestEvent extends CreateQuestEvent {
 
 class LeaveQuestCreationEvent extends CreateQuestEvent{
   const LeaveQuestCreationEvent();
+}
+
+class EditQuestEvent extends CreateQuestEvent{
+  QuestModel questModel;
+  EditQuestEvent({required this.questModel});
+}
+
+class EditInDataBaseQuestEvent extends CreateQuestEvent{
+  QuestModel questModel;
+  EditInDataBaseQuestEvent({required this.questModel});
+}
+
+class StartCreatingQuestEvent extends CreateQuestEvent{
+  QuestModel questModel;
+  StartCreatingQuestEvent({required this.questModel});
 }

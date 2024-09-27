@@ -3,16 +3,19 @@ import 'package:quest/data/models/question.dart';
 import 'package:quest/domain/entities/quest.dart';
 
 class QuestModel extends QuestEntity {
+  late String? id;
   QuestModel(
-      {String? id,
+      {String? creatorEmail,
       int? quantityOfQuestions,
       String? name,
       int? maxPoints,
       List<QuestionModel>? questions,
       List<LocationModel>? locations,
-      bool? isShuffled})
+      bool? isShuffled,
+      String? id})
       : super() {
     this.id = id;
+    this.creatorEmail = creatorEmail;
     this.quantityOfQuestions = quantityOfQuestions;
     this.name = name;
     this.maxPoints = maxPoints;
@@ -28,27 +31,29 @@ class QuestModel extends QuestEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'creatorEmail': creatorEmail,
       'quantityOfQuestions': quantityOfQuestions,
       'name': name,
       'maxPoints': maxPoints,
       'isShuffeled': isShuffled,
-      'questions': questions != null
-          ? questions?.map((question) => question.toJson()).toList()
-          : null,
-      'locations': locations != null
-          ? locations?.map((locations) => locations.toJson()).toList()
-          : null,
+      'questions': questions?.map((question) => question.toJson()).toList(),
+      'locations': locations?.map((locations) => locations.toJson()).toList(),
     };
   }
 
-  factory QuestModel.fromJson(Map<String, dynamic> json) {
+  factory QuestModel.fromJson(Map<String, dynamic> json, String id) {
     return QuestModel(
-      id: json['id'],
+      id: id,
+      creatorEmail: json['creatorEmail'],
       quantityOfQuestions: json['quantityOfQuestions'],
       name: json['name'],
       maxPoints: json['maxPoints'],
-      questions: json['questions'],
+      questions: (json['questions'] as List<dynamic>?)
+          ?.map((questionJson) => QuestionModel.fromJson(questionJson))
+          .toList(),
+      locations: (json['locations'] as List<dynamic>?)
+          ?.map((locationJson) => LocationModel.fromJson(locationJson))
+          .toList(),
       isShuffled: json['isShuffled'],
     );
   }

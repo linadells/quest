@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quest/core/style.dart';
+import 'package:quest/data/models/quest.dart';
 import 'package:quest/domain/usecases/log_in.dart';
 import 'package:quest/domain/usecases/register.dart';
 import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 import 'package:quest/presentation/bloc/registration_bloc/bloc/registration_bloc.dart';
-import 'package:quest/presentation/pages/registration_page.dart';
-import 'package:quest/presentation/pages/welcome_page.dart';
 import 'package:quest/presentation/routes.dart/router_config.dart';
 
 void main() async {
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
               RegistrationBloc(RegisterUseCase(sl()), LogInUseCase(sl())),
         ),
         BlocProvider(
-          create: (context) => CreateQuestBloc(),
+          create: (context) => CreateQuestBloc(QuestModel()),
         ),
       ],
       child: //WelcomeScreen(),

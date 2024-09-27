@@ -29,7 +29,7 @@ class AppThemes {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: false,
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
         fontFamily: 'Montserrat',
@@ -37,14 +37,14 @@ class AppThemes {
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30.0), // Закруглені кути
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: kMedium, // Колір межі при стандартному стані
           width: 2.0, // Ширина межі
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30.0), // Закруглені кути
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: kMedium, // Колір межі при активному стані
           width: 2.0, // Ширина межі
         ),
@@ -59,27 +59,27 @@ class AppThemes {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
+        backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.pressed)) {
               return kMedium.withOpacity(0.6); // Колір фону при натисканні
-            } else if (states.contains(MaterialState.hovered)) {
+            } else if (states.contains(WidgetState.hovered)) {
               return kMedium.withOpacity(0.8); // Колір фону при наведенні
             }
             return kMedium; // Основний колір фону кнопки
           },
         ),
-        foregroundColor: MaterialStateProperty.all<Color>(
+        foregroundColor: WidgetStateProperty.all<Color>(
           Colors.white, // Колір тексту кнопки
         ),
-        textStyle: MaterialStateProperty.all<TextStyle>(
-          TextStyle(
+        textStyle: WidgetStateProperty.all<TextStyle>(
+          const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             fontFamily: 'Montserrat',
           ),
         ),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0), // Закруглені кути
           ),

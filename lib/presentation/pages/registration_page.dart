@@ -10,19 +10,19 @@ import 'package:quest/presentation/routes.dart/routes_constants.dart';
 
 class RegistrationScreen extends StatelessWidget {
   final bool register;
-  const RegistrationScreen({required this.register});
+  const RegistrationScreen({super.key, required this.register});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: BackButton(
+          leading: const BackButton(
         color: Colors.white,
       )),
       body: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationLoading) {
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is RegistrationError) {
@@ -45,20 +45,20 @@ class RegistrationScreen extends StatelessWidget {
     TextEditingController nicknameController = TextEditingController();
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Start your quest',
                 style: Theme.of(context).textTheme.displayLarge),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             register
@@ -66,9 +66,10 @@ class RegistrationScreen extends StatelessWidget {
                     children: [
                       TextField(
                         controller: nicknameController,
-                        decoration: InputDecoration(labelText: 'Nickname'),
+                        decoration:
+                            const InputDecoration(labelText: 'Nickname'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],
@@ -77,18 +78,18 @@ class RegistrationScreen extends StatelessWidget {
             TextField(
               controller: passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextButton(
                 onPressed: () {
                   final email = emailController.text;
                   final password = passwordController.text;
-                  final String? nickname = nicknameController.text;
+                  final String nickname = nicknameController.text;
                   context.read<RegistrationBloc>().add(register
                       ? Register(
                           email: email, password: password, nickname: nickname!)
@@ -103,4 +104,3 @@ class RegistrationScreen extends StatelessWidget {
     );
   }
 }
-

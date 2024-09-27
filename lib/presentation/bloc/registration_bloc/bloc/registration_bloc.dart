@@ -24,7 +24,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     try {
       data = await _registerUseCase(
           params: PlayerDataRegistrationEntity(email: event.email, password: event.password, nickname: event.nickname));
-      emit(RegistrationDone());
+      emit(const RegistrationDone());
     } on FirebaseAuthException catch (e) {
       data=DataFailed(e);
       emit(RegistrationError(error: data.error!));
@@ -38,7 +38,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     try {
       data = await _logInUseCase(
           params: PlayerDataRegistrationEntity(email: event.email, password: event.password));
-      emit(RegistrationDone());
+      emit(const RegistrationDone());
     } on FirebaseAuthException catch (e) {
       data=DataFailed(e);
       if(data.error!.toString()=='[firebase_auth/unknown-error] An internal error has occurred.'){

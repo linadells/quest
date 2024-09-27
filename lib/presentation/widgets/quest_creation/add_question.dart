@@ -10,7 +10,7 @@ import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc
 
 class AddQuestion extends StatefulWidget {
   QuestionModel? questionModel;
-  AddQuestion({this.questionModel});
+  AddQuestion({super.key, this.questionModel});
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -66,25 +66,25 @@ class _AddQuestionState extends State<AddQuestion> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: TextField(
             controller: _controllerQuestion,
-            decoration: InputDecoration(labelText: 'Your question'),
+            decoration: const InputDecoration(labelText: 'Your question'),
           ),
         ),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             child: SizedBox(
               height: 30,
               width: 30,
               child: ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStatePropertyAll(
+                style: const ButtonStyle(
+                  padding: WidgetStatePropertyAll(
                       EdgeInsets.zero), // Відсутність паддінгу
-                  backgroundColor: MaterialStatePropertyAll(kMedium),
-                  foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  shape: MaterialStatePropertyAll(
+                  backgroundColor: WidgetStatePropertyAll(kMedium),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  shape: WidgetStatePropertyAll(
                     CircleBorder(), // Кругла форма кнопки
                   ),
                 ),
@@ -93,7 +93,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     if (points != 1) points--;
                   });
                 },
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.exposure_minus_1,
                     size: 20,
@@ -104,9 +104,9 @@ class _AddQuestionState extends State<AddQuestion> {
           ),
           Container(
             decoration: kStyleForPoints,
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Text(
-              'Points: ${points}',
+              'Points: $points',
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -114,16 +114,16 @@ class _AddQuestionState extends State<AddQuestion> {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             child: SizedBox(
               height: 30,
               width: 30,
               child: ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                  backgroundColor: MaterialStatePropertyAll(kMedium),
-                  foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  shape: MaterialStatePropertyAll(
+                style: const ButtonStyle(
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                  backgroundColor: WidgetStatePropertyAll(kMedium),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
+                  shape: WidgetStatePropertyAll(
                     CircleBorder(),
                   ),
                 ),
@@ -132,7 +132,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     if (points != 10) points++;
                   });
                 },
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.exposure_plus_1_outlined,
                     size: 20,
@@ -163,7 +163,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     Expanded(
                       child: Container(
                         height: 45,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         child: TextField(
                           controller: answerController,
                           decoration:
@@ -181,11 +181,11 @@ class _AddQuestionState extends State<AddQuestion> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               child: TextButton(
                 onPressed: _addAnswerField,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Add Answer',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!
@@ -195,7 +195,7 @@ class _AddQuestionState extends State<AddQuestion> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               child: TextButton(
                 onPressed: () {
                   try {
@@ -211,7 +211,7 @@ class _AddQuestionState extends State<AddQuestion> {
                         .map((controller) => controller.text)
                         .where((text) => text.isNotEmpty)
                         .toList();
-                    if (answers.length == 0) {
+                    if (answers.isEmpty) {
                       throw Exception('You have to add at least one answer');
                     }
                     final question = QuestionModel(
@@ -222,20 +222,21 @@ class _AddQuestionState extends State<AddQuestion> {
                         theme: 'theme',
                         correctAnswer: tempCorrectAnswer);
                     GoRouter.of(context).pop();
-                    if (widget.questionModel == null)
+                    if (widget.questionModel == null) {
                       BlocProvider.of<CreateQuestBloc>(context)
                           .add(FinishAddQuestionEvent(questionModel: question));
-                    else
+                    } else {
                       BlocProvider.of<CreateQuestBloc>(context).add(
                           FinishEditQuestionEvent(
                               questionModel: question,
                               oldQuestionModel: widget.questionModel!));
+                    }
                   } on Exception catch (e) {
                     showExceptionAlert(e, context);
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Submit',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!

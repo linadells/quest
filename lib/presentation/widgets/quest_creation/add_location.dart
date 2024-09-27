@@ -3,13 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quest/core/style.dart';
 import 'package:quest/data/models/location.dart';
-import 'package:quest/data/models/quest.dart';
-import 'package:quest/domain/entities/location.dart';
-import 'package:quest/domain/entities/question.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 
 class AddLocation extends StatefulWidget {
-  AddLocation();
+  const AddLocation({super.key});
 
   @override
   State<AddLocation> createState() => _AddLocationState();
@@ -56,13 +53,13 @@ class _AddLocationState extends State<AddLocation> {
                 TextEditingController answerController = entry.value;
 
                 return Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   height: 60,
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   child: TextField(
                     controller: answerController,
                     decoration:
-                        InputDecoration(labelText: 'Location ${index + 1}'),
+                        InputDecoration(hintText: 'Location ${index + 1}'),
                   ),
                 );
               }).toList(),
@@ -73,11 +70,11 @@ class _AddLocationState extends State<AddLocation> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               child: TextButton(
                 onPressed: _addAnswerField,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Add Location',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!
@@ -87,7 +84,7 @@ class _AddLocationState extends State<AddLocation> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               child: TextButton(
                 onPressed: () {
                   final locations = _locationsControllers
@@ -95,10 +92,10 @@ class _AddLocationState extends State<AddLocation> {
                       .where((text) => text.isNotEmpty)
                       .map((e) => LocationModel(location: e))
                       .toList();
-                  if (locations.length == 0) {
+                  if (locations.isEmpty) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                           content:
                               Text('You have to add at least one location')),
                     );
@@ -111,7 +108,7 @@ class _AddLocationState extends State<AddLocation> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Submit',
                     style: AppThemes.lightTheme.textTheme.bodyLarge!

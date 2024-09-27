@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -5,11 +6,10 @@ import 'package:quest/core/format_exception.dart';
 import 'package:quest/data/models/location.dart';
 import 'package:quest/data/models/quest.dart';
 import 'package:quest/data/models/question.dart';
-import 'package:quest/domain/entities/location.dart';
-import 'package:quest/domain/entities/question.dart';
 import 'package:quest/injection_container.dart';
 import 'package:quest/presentation/bloc/create_quest_bloc/bloc/create_quest_bloc.dart';
 import 'package:quest/presentation/routes.dart/routes_constants.dart';
+import 'package:quest/presentation/widgets/edit_location.dart';
 import 'package:quest/presentation/widgets/quest_creation/add_location.dart';
 import 'package:quest/presentation/widgets/quest_creation/add_question.dart';
 import 'package:quest/presentation/widgets/quest_creation/general_for_quest_creation.dart';
@@ -21,13 +21,17 @@ class CreateQuestPage extends StatelessWidget {
   late List<QuestionModel> questions;
   late List<LocationModel> locations;
   late QuestModel questModel;
+  bool isEditting = false;
   TextEditingController nameController = TextEditingController();
 
+  CreateQuestPage({super.key});
+
   void setPropertiesToQuest(QuestModel quest, BuildContext context) {
-    if (nameController.text.isNotEmpty)
+    if (nameController.text.isNotEmpty) {
       quest.name = nameController.text;
-    else
+    } else {
       throw Exception('Name can`t be empty');
+    }
     quest.isShuffled = quest.isShuffled ?? false;
     int lenQuestions = questModel.questions?.length ?? 0;
     int lenLocations = questModel.locations?.length ?? 0;
@@ -43,6 +47,7 @@ class CreateQuestPage extends StatelessWidget {
       quest.quantityOfQuestions = lenQuestions;
       questModel.maxPoints = questModel.questions!
           .fold(0, (prevSum, question) => prevSum! + question.points);
+      questModel.creatorEmail = sl<FirebaseAuth>().currentUser!.email;
     }
   }
 
@@ -51,12 +56,28 @@ class CreateQuestPage extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              isEditting
+                  ? 'Edit '
+                  : 'Create '
+                      'your quest',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.white),
+            ),
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
           bottomNavigationBar: const NavigationBarCreateQuest(),
           body: BlocBuilder<CreateQuestBloc, CreateQuestState>(
             builder: (context, state) {
+              if (state is EdditingQuestState) isEditting = true;
               questModel = BlocProvider.of<CreateQuestBloc>(context).questModel;
               questions = questModel.questions ?? [];
               locations = questModel.locations ?? [];
+              if (questModel.name != null && questModel.name!.isNotEmpty)
+                nameController.text = questModel.name!;
               if (state is AddingQuestionState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   showModalBottomSheet(
@@ -81,8 +102,19 @@ class CreateQuestPage extends StatelessWidget {
                         .add(FinishAddQuestionEvent());
                   });
                 });
-              }
-              else if (state is AddingLocationState) {
+              } else if (state is EditingLocationState) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showModalBottomSheet(
+                      isDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return EditLocation(state.locationModel);
+                      }).then((_) {
+                    BlocProvider.of<CreateQuestBloc>(context)
+                        .add(FinishAddLocationEvent());
+                  });
+                });
+              } else if (state is AddingLocationState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   showModalBottomSheet(
                       isDismissible: true,
@@ -95,7 +127,7 @@ class CreateQuestPage extends StatelessWidget {
                   });
                 });
               } else if (state is LoadingQuestCreationState) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (state is FinishQuestCreationState) {
@@ -104,7 +136,9 @@ class CreateQuestPage extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Your quest was created successfully'),
+                          title: Text(isEditting
+                              ? 'Your quest was edited successfully'
+                              : 'Your quest was created successfully'),
                           actions: [
                             TextButton(
                                 onPressed: () {
@@ -114,23 +148,22 @@ class CreateQuestPage extends StatelessWidget {
                                   BlocProvider.of<CreateQuestBloc>(context)
                                       .add(const LeaveQuestCreationEvent());
                                 },
-                                child: Text('Ok'))
+                                child: const Text('Ok'))
                           ],
                         );
                       });
                 });
               }
               return Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    Text('Create your quest',
-                        style: Theme.of(context).textTheme.displayLarge),
                     Container(
-                      margin: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
                       child: TextField(
                         controller: nameController,
-                        decoration: InputDecoration(labelText: 'Name of quest'),
+                        decoration:
+                            const InputDecoration(labelText: 'Name of quest'),
                       ),
                     ),
                     Row(
@@ -140,15 +173,19 @@ class CreateQuestPage extends StatelessWidget {
                             onPressed: () {
                               try {
                                 setPropertiesToQuest(questModel, context);
-                                BlocProvider.of<CreateQuestBloc>(context)
-                                    .add(const FinishCreationQuestEvent());
+                                isEditting
+                                    ? BlocProvider.of<CreateQuestBloc>(context)
+                                        .add(EditInDataBaseQuestEvent(
+                                            questModel: questModel))
+                                    : BlocProvider.of<CreateQuestBloc>(context)
+                                        .add(const FinishCreationQuestEvent());
                               } on Exception catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(formatException(e))));
                               }
                             },
-                            child: Text('Create'))
+                            child: Text(isEditting ? 'Edit' : 'Create'))
                       ],
                     ),
                     Expanded(
@@ -159,7 +196,7 @@ class CreateQuestPage extends StatelessWidget {
                         ListOfLocations(
                           locations: locations,
                         ),
-                        SettingsForQuest(),
+                        const SettingsForQuest(),
                       ]),
                     ),
                   ],

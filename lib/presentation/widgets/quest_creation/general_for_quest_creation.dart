@@ -24,14 +24,14 @@ class _SettingsForQuestState extends State<SettingsForQuest> {
             ?.length ??
         0;
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Shuffle locations'),
+              const Text('Shuffle locations'),
               Switch(
                   value: isShuffled,
                   onChanged: ((value) {

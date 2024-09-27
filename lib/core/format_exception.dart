@@ -23,7 +23,7 @@ void showExceptionAlert(Exception e, BuildContext context) {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Ok'))
+                child: const Text('Ok'))
           ],
         );
       });
